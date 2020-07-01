@@ -1,0 +1,284 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JobApplication</name>
+    </assembly>
+    <members>
+        <member name="T:JobApplication.Controllers.CvsController">
+            <summary>
+            This is the controller for the CV entity.
+            It inherites the Controller class and provides the actions a certain cv has.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.CvsController.#ctor(JobApplication.Services.IUserService,JobApplication.Services.Interfaces.ICvService,JobApplication.Data.JobApplicationDbContext)">
+            <summary>
+            This is the constructor of the CvsController class.
+            </summary>
+            <param name="UserService">User service</param>
+            <param name="service">Cv service</param>
+            <param name="context">Data base context</param>
+        </member>
+        <member name="M:JobApplication.Controllers.CvsController.CheckLoggedUser">
+            <summary>
+            This method checks if there is any logged user.
+            If so, the logged user is put in the ViewData which is
+            passed to the Index, Contact, About and Provacy views.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.CvsController.CreateCv">
+            <summary>
+            This action checks the logged user.
+            </summary>
+            <returns>The CreateCv view where the user can create his CV.</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.CvsController.CreateCv(System.String,System.Int32,System.Int32)">
+            <summary>
+            This HttpPost action uses the Cv service to create
+            a cv with the given parameters.
+            </summary>
+            <param name="education">Education</param>
+            <param name="experience">Experience</param>
+            <param name="userId">The Id of the user with that cv</param>
+            <returns>A RedirectToAction method which redirects the user to the Profile page.</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.CvsController.ViewCv">
+            <summary>
+            This action takes the user cv and then puts it in the ViewData.
+            Finally it puts the data base context to the ViewData.
+            </summary>
+            <returns>The ViewCv view which uses the objects in the ViewData.</returns>
+        </member>
+        <member name="T:JobApplication.Controllers.HomeController">
+            <summary>
+            This is the home controller class.
+            It inherites the Controller class and provides the initial actions a certain user has.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.HomeController.#ctor(JobApplication.Services.IUserService,JobApplication.Services.Interfaces.IJobService)">
+            <summary>
+            This is the constructor of the HomeController class.
+            </summary>
+            <param name="UserService">User service</param>
+            <param name="jobsService">Job service</param>
+        </member>
+        <member name="M:JobApplication.Controllers.HomeController.CheckLoggedUser">
+            <summary>
+            This method checks if there is any logged user.
+            If so, the logged user is put in the ViewData which is
+            passed to the Index, Contact, About and Provacy views.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.HomeController.Index">
+            <summary>
+            This action checks the logged user and puts all created jobs in the ViewData and 
+            passes it to the Index view.
+            </summary>
+            <returns>The Index view</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.HomeController.About">
+            <summary>
+            This action checks the logged user and puts a message in the ViewData.
+            </summary>
+            <returns>The About view</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.HomeController.Contact">
+            <summary>
+            This action checks the logged user and puts a message in the ViewData.
+            </summary>
+            <returns>The Contact view</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.HomeController.Error">
+            <summary>
+            This action checks if there is any error during the run if the application.
+            </summary>
+            <returns>Thew Error view.</returns>
+        </member>
+        <member name="T:JobApplication.Controllers.JobsController">
+            <summary>
+            This is the controller for the Job entity.
+            It inherites the Controller class and provides the actions a certain job has.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.JobsController.#ctor(JobApplication.Services.IUserService,JobApplication.Services.Interfaces.IJobService)">
+            <summary>
+            This is the constructor of the JobsController class.
+            </summary>
+            <param name="UserService">User service</param>
+            <param name="JobsService">Job service</param>
+        </member>
+        <member name="M:JobApplication.Controllers.JobsController.CheckLoggedUser">
+            <summary>
+            This method checks if there is any logged user.
+            If so, the logged user is put in the ViewData which is
+            passed to the CreateJob view.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.JobsController.CreateJob">
+            <summary>
+            This action checks the logged user.
+            </summary>
+            <returns>The CreateJob view and passes it the ViewData.</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.JobsController.CreateJob(System.String,System.Decimal,System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            This HttpPost action uses the Job service to 
+            create a job with the given parameters.
+            </summary>
+            <param name="name">Job name</param>
+            <param name="salary">Job salary</param>
+            <param name="category">Job category</param>
+            <param name="description">Job description</param>
+            <param name="workPlace">Job work place</param>
+            <param name="requiredExperience">Job's required experience</param>
+            <param name="requiredEducation">Job's required education</param>
+            <returns>A RedirectToAction method which redirects the user to the Index view
+            where he can continue searching for jobs.
+            </returns>
+        </member>
+        <member name="M:JobApplication.Controllers.JobsController.ViewJob(System.Int32)">
+            <summary>
+            This action checks the logged user and puts the job that is going to be viewed in details in the ViewData.
+            </summary>
+            <param name="id"></param>
+            <returns>Returns the ViewJob view and passes it the ViewData.</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.JobsController.ApplyForJob(System.Int32)">
+            <summary>
+            This action represents the applying functionaity.
+            If the user has already applied for the job that he wants to apply
+            the application tells him that he has already applied and nothing happens.
+            If the user is not logged in yet but tries to apply for a job, the user is 
+            redirected to the log in page where he can log in and then continue searching for jobs.
+            Otherwise (if the user has logged in and wants to apply for a job he has not already), 
+            that job is put in the ViewData and the methods returns the ViewJob view with a messeage telling
+            the user that he successfully applied for that job. 
+            </summary>
+            <param name="id"></param>
+            <returns>Described above.</returns>
+        </member>
+        <member name="T:JobApplication.Controllers.ProjectsController">
+            <summary>
+            This is the controller class for the Project entity.
+            It inherites the Controller class and provides the actions a certain project has.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.ProjectsController.#ctor(JobApplication.Services.IUserService,JobApplication.Services.Interfaces.IProjectService)">
+            <summary>
+            This is the contructor of the ProjectController class
+            </summary>
+            <param name="UserService">User service</param>
+            <param name="service">Project service</param>
+        </member>
+        <member name="M:JobApplication.Controllers.ProjectsController.CheckLoggedUser">
+            <summary>
+            This method checks if there is any logged user.
+            If so, the logged user is put in the ViewData which is
+            passed to the CreateProject view.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.ProjectsController.CreateProject">
+            <summary>
+            This action checks the logged user. 
+            </summary>
+            <returns>The CreateProject view and passes the ViewData to that view.</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.ProjectsController.CreateProject(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            This HttpPost action uses the Project service to create a project
+            with the given parameters.
+            </summary>
+            <param name="name">Project name</param>
+            <param name="technology">Project technology</param>
+            <param name="description">Project description</param>
+            <param name="achievedGoals">Project achieved goals</param>
+            <param name="futureGoals">Project future goals</param>
+            <returns>A RedirectToAction method which redirects 
+            the user to the ViewCv view where you can check your CV.
+            </returns>
+        </member>
+        <member name="T:JobApplication.Controllers.UserController">
+            <summary>
+            This is the controller class for the user entity.
+            It inherites the Controller class and provides the actions a certain user has.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.UserController.#ctor(JobApplication.Services.IUserService,JobApplication.Data.JobApplicationDbContext)">
+            <summary>
+            This is the constructor of the UserController class
+            </summary>
+            <param name="service">The User service that this controller will use</param>
+            <param name="context">Data base context</param>
+        </member>
+        <member name="M:JobApplication.Controllers.UserController.CheckLoggedUser">
+            <summary>
+            This method checks if there is a logged user.
+            If there is a logged user, takes it and create a ViewData of it.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Controllers.UserController.Register">
+            <summary>
+            This action returns the Register view in the User folder.
+            </summary>
+            <returns>Aforementioned.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:JobApplication.Controllers.UserController.Register(System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.Boolean)" -->
+        <member name="M:JobApplication.Controllers.UserController.Login">
+            <summary>
+            This action return the Login view in the User folder.
+            </summary>
+            <returns>Aforementioned.</returns>
+        </member>
+        <member name="M:JobApplication.Controllers.UserController.Login(System.String,System.String)">
+            <summary>
+            This HttpPost action checks if the user has logged in successfully.
+            </summary>
+            <param name="username"></param>
+            <param name="password"></param>
+            <returns>If the user has logged in successfuly, this method redirects him to the index page.
+            Otherwise, it redirects him back to the log in page.
+            </returns>
+        </member>
+        <member name="M:JobApplication.Controllers.UserController.Profile">
+            <summary>
+            This action gets the logged user and his Cv passes them to the Profile view 
+            and returns that view.
+            </summary>
+            <returns>The Profile view</returns>
+        </member>
+        <member name="T:JobApplication.Program">
+            <summary>
+            The entry point of the application
+            </summary>
+        </member>
+        <member name="M:JobApplication.Program.Main(System.String[])">
+            <summary>
+            This method is called first.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="T:JobApplication.Startup">
+            <summary>
+            All the initial configuration of the application stays here.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            The constructor the the Startup class
+            </summary>
+            <param name="configuration">Configuration</param>
+        </member>
+        <member name="M:JobApplication.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services">Services</param>
+        </member>
+        <member name="M:JobApplication.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app">the application builed</param>
+            <param name="env">the application environment</param>
+        </member>
+    </members>
+</doc>

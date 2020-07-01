@@ -1,0 +1,44 @@
+﻿@using JobApplication.ViewModels;
+@using JobApplication.Data.Models;
+@using JobApplication.Data;
+
+@{
+    ViewData["Title"] = "Home Page";
+    AllJobsViewModel jobs = ViewData["CreatedJobs"] as AllJobsViewModel;
+    JobApplicationDbContext Context = ViewData["Context"] as JobApplicationDbContext;
+}
+
+<div class="list-group">
+    <h3>Jobs You have created</h3>
+    <hr />
+    <ul class="list-unstyled">
+        @foreach (var job in jobs.Jobs)
+        {
+            <li class="list-inline-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-primary">Job name: @job.Name</h2>
+                        <h3>Job applicants:</h3>
+                        @foreach (var applicant in job.Applicants)
+                        {
+                        <div style="padding-left: 25px;">
+                            <h5>@applicant.FirstName @applicant.LastName, @applicant.Email, @applicant.PhoneNumber</h5>
+                            @if (@Context.CVs.FirstOrDefault(c => c.UserId == applicant.Id) != null)
+                            {
+                                <h5>@applicant.FirstName @applicant.LastName's CV:</h5>
+                                <div style="padding-left: 25px;">
+                                    <h6>Experience: @Context.CVs.FirstOrDefault(c => c.UserId == applicant.Id).Experience years</h6>
+                                    <h6>Education: @Context.CVs.FirstOrDefault(c => c.UserId == applicant.Id).Education</h6>
+                                </div>
+                                <hr />
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <hr />
+            </li>
+        }
+    </ul>
+</div>
+

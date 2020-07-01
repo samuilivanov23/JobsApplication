@@ -1,0 +1,49 @@
+﻿@using JobApplication.Data.Models;
+@using JobApplication.Data;
+
+@{
+    ViewData["Title"] = "ViewCv";
+    CV Cv = ViewData["UserCv"] as CV;
+    JobApplicationDbContext context = ViewData["Context"] as JobApplicationDbContext;
+    List<Project> userProjects = context.Projects.Where(p => p.CvId == Cv.Id).ToList();
+}
+
+<div class="list-group">
+    <ul class="list-unstyled">
+        <li class="list-inline-item">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Your CV</h2>
+                    <hr />
+                    <h5>Education: @Cv.Education degree</h5>
+                    <h5>Experience: @Cv.Experience years</h5>
+                    <hr />
+                    @if (userProjects != null)
+                    {
+                        <h2>Projects:</h2>
+                        @for (int i = 0; i < userProjects.Count; i++)
+                        {
+                            var project = userProjects[i];
+                            <h2 class ="text-primary"style="padding-top:25px;">Project number @(i+1)</h2>
+                            <div style="padding-left: 50px;" >
+                                <h3 class="card-title">Project Name: @project.Name</h3>
+                                <p>Project Description: @project.Description</p>
+                                <h3 class="text-muted">Technologies used: @project.Technology</h3>
+                                <h4> Goals: </h4>
+                                <h5 style="padding-left: 50px;"> Achieved goals: @project.AchievedGoals</h5>
+                                <h5 style="padding-left: 50px;"> Future goals: @project.FutureGoals</h5>
+                                <hr />
+                            </div>
+                        }
+                    }
+                    <a class="btn btn-primary btn-rounded" asp-area="" asp-controller="Projects" asp-action="CreateProject">Add projects you've worked on</a>
+                    <br />
+                    <br />
+                    <a class="btn btn-primary btn-rounded" asp-area="" asp-controller="User" asp-action="Profile">Back to profile</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+

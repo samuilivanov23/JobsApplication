@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JobApplication.Services</name>
+    </assembly>
+    <members>
+        <member name="T:JobApplication.Services.CvService">
+            <summary>
+             This is a class implements the ICvService interface and is used
+             to ensure the functionalities that a certain CV has.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Services.CvService.#ctor(JobApplication.Data.JobApplicationDbContext,JobApplication.Services.IUserService)">
+            <summary>
+            This is the constructor of the CvService class
+            </summary>
+            <param name="context">Data base context</param>
+            <param name="userService">The service that is responsible for the user</param>
+        </member>
+        <member name="M:JobApplication.Services.CvService.CreateCv(System.String,System.Int32,System.Int32)">
+            <summary>
+            This method creates a cv with the given parameters in the database 
+            by first getting the logged user
+            </summary>
+            <param name="education">The education of the user i.e. Masters, Bachelor, etc.</param>
+            <param name="experience">The experience of the user (in years)</param>
+            <param name="userId">The id of the user associated with the current cv.</param>
+            <returns>The id of the created cv.</returns>
+        </member>
+        <member name="M:JobApplication.Services.CvService.ViewCv">
+            <summary>
+            This method returns a Cv that will be used in the ViewCv view
+            so the user can view his CV in detail.
+            </summary>
+            <returns>Aforementioned.</returns>
+        </member>
+        <member name="T:JobApplication.Services.Interfaces.ICvService">
+            <summary>
+            The interface that is implemented by the CV service
+            </summary>
+        </member>
+        <member name="T:JobApplication.Services.Interfaces.IJobService">
+            <summary>
+            The interface that is implemented by the Job service
+            </summary>
+        </member>
+        <member name="T:JobApplication.Services.Interfaces.IProjectService">
+            <summary>
+            The interface that is implemented by the Project service
+            </summary>
+        </member>
+        <member name="T:JobApplication.Services.IUserService">
+            <summary>
+            The interface that is implemented by the User service
+            </summary>
+        </member>
+        <member name="T:JobApplication.Services.JobService">
+            <summary>
+            This class implements the IJobService interface and is used
+            to ensure the functionalities that a certain job has.
+            </summary>
+        </member>
+        <member name="M:JobApplication.Services.JobService.#ctor(JobApplication.Data.JobApplicationDbContext,JobApplication.Services.IUserService)">
+            <summary>
+            This is the constructor of the JobService class
+            </summary>
+            <param name="context">Data base context</param>
+            <param name="userService">The service that is responsible for the user</param>
+        </member>
+        <member name="M:JobApplication.Services.JobService.CreateJob(System.String,System.Decimal,System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            This method creates a job with the given parameters and adds it
+            to the database.
+            </summary>
+            <param name="name">The name of the job that is being created</param>
+            <param name="salary">The monthly salary of the job</param>
+            <param name="category">The category of the job i.e. programming, management, etc.</param>
+            <param name="description">The description of the job so that users, applying for it, can have a better understanding of the work process</param>
+            <param name="workPlace">The work place i.e. Sofiq,Bulgaria</param>
+            <param name="requiredExperience">The experience, required for the job</param>
+            <param name="requiredEducation">The education, required for the job</param>
+            <returns>the id of the newly created job.</returns>
+        </member>
+        <member name="M:JobApplication.Services.JobService.GetAllJobs(System.Boolean)">
+            <summary>
+            This method is responsible for getting all the available jobs so the user can browse through them.
+            If we want to show the jobs that the current user has created (if he is an employer)
+            the method's only parameter is set to true and if we want to show all available jobs, it is set to false.
+            </summary>
+            <param name="viewCreatedJobs">view only created jobs</param>
+            <returns>A new AllJobs view model for the jobs we have sellected based on the viewCreatedJobs parameter</returns>
+        </member>
+        <member name="M:JobApplication.Services.JobService.ViewJob(System.Int32)">
+            <summary>
+            This method returns the requested job based on the given id.
+            </summary>
+            <param name="id">the id of the requested job</param>
+            <returns>Aforementioned</returns>
+        </member>
+        <member name="M:JobApplication.Services.JobService.ApplyForJob(System.Int32)">
+            <summary>
+            This method allows the user to apply for the listed jobs.
+            </summary>
+            <param name="id">The id of the job that the user wants to apply for.</param>
+            <returns>If there isn't a logged user the method returns 0.
+            if a user is logged in, but tries to apply for a job that he has already applied for, the method returns -1.
+            if a user is trying to apply for a job he has created, the method returns -2.
+            Eventually, if a user is logged in and applies for a job he has not applied yet or created, the method returns 1;
+            </returns>
+        </member>
+        <member name="T:JobApplication.Services.LoggedUserInfo">
+            <summary>
+            This is a static class which holds the logged user id so it can be accessed from anywhere.
+            </summary>
+        </member>
+        <member name="F:JobApplication.Services.LoggedUserInfo.LoggedUserId">
+            <summary>
+            The id of the logged user (by default it is 0, meaning there is no logged in user)
+            </summary>
+        </member>
+        <member name="T:JobApplication.Services.ProjectService">
+            <summary>
+            This class implements the IProjectService interface and is used to
+            ensure the functionalities that a certain project has (to create a project)
+            </summary>
+        </member>
+        <member name="M:JobApplication.Services.ProjectService.#ctor(JobApplication.Data.JobApplicationDbContext,JobApplication.Services.IUserService,JobApplication.Services.Interfaces.ICvService)">
+            <summary>
+            This is the constructor of the ProjectService class
+            </summary>
+            <param name="context">Data base context</param>
+            <param name="userService">The service that is responsible for the user</param>
+            <param name="cvService">The service that is responsible for the CVs</param>
+        </member>
+        <member name="M:JobApplication.Services.ProjectService.CreateProject(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            this method creates a project with the given parameters 
+            by first getting the logged user and checks if he has a CV.
+            If that is true, the creation of the project is successful and the project is added into the user's CV
+            and all the changes are saved in the database.
+            Otherwise, the method returns -1;
+            </summary>
+            <param name="name">Project name</param>
+            <param name="technology">Project technologies</param>
+            <param name="description">Project description</param>
+            <param name="achievedGoals">Project achieved goals</param>
+            <param name="futureGoals">Project future goals</param>
+            <returns>The user that is creating the project has a Cv the method returns the project Id.
+            Otherwise, the method returns -1.
+            </returns>
+        </member>
+        <member name="T:JobApplication.Services.UserService">
+            <summary>
+            This class implements the IUserService interface and is used 
+            to ensure the user functionalities (To be able to log in, to be able to register in the data base and 
+            to get the user that is currently logged in)
+            </summary>
+        </member>
+        <member name="M:JobApplication.Services.UserService.#ctor(JobApplication.Data.JobApplicationDbContext)">
+            <summary>
+            This is the constructor of the UserService class
+            </summary>
+            <param name="context">Data base context</param>
+        </member>
+        <member name="M:JobApplication.Services.UserService.Register(System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            This method adds a user with the given parameters in the User table of the database.
+            First it checks if the there has already been a user created with the same username/email or phone number.
+            If that is true, the method returns -1.
+            Otherwise, the user gets successfuly created and added into the database
+            </summary>
+            <param name="firstName">The first name of the user</param>
+            <param name="lastName">The last name of the user</param>
+            <param name="age">The age of the user</param>
+            <param name="email">The user's email for additional contact</param>
+            <param name="phoneNumber">The user's phone number for additional contact</param>
+            <param name="username">the user's username</param>
+            <param name="password">the user's password</param>
+            <param name="confirmPassword">a confirmation of the password (the two passwords should match)</param>
+            <param name="isEmployer">if true, the user is an employer and can create jobs</param>
+            <returns>The Id of the registered user or, as mentioned above, -1 if the the registration failed</returns>
+        </member>
+        <member name="M:JobApplication.Services.UserService.Login(System.String,System.String)">
+            <summary>
+            This methods logs the user in by first checking if a user with the given username/pass exists in the database
+            </summary>
+            <param name="username">The username of the user</param>
+            <param name="password">The password, associated with the given username</param>
+            <returns>This method returns the user Id if it exists in the data base.</returns>
+        </member>
+        <member name="M:JobApplication.Services.UserService.GetLoggedUser">
+            <summary>
+            This method returns the user that is currently logged in.
+            If the user doesn't have a CV, it returns the user straight from the database (idk either)
+            </summary>
+            <returns>The logged in user.</returns>
+        </member>
+    </members>
+</doc>
